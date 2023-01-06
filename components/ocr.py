@@ -2,11 +2,11 @@ import pytesseract as tess
 from PIL import Image
 
 
-def set_tesseract_path(path):
+def set_tesseract_path(path: str) -> None:
     tess.pytesseract.tesseract_cmd = path
 
 
-def get_image(path):
+def get_image(path: str) -> Image:
     original_image = Image.open(path)
     # convert to grayscale
     grayscale_image = original_image.convert('L')
@@ -15,7 +15,7 @@ def get_image(path):
     return grayscale_image
 
 
-def get_text(image):
+def get_text(image: Image) -> list[str]:
     text = tess.image_to_string(image)
     # remove newlines
     text = text.replace('\n', ',')
