@@ -7,7 +7,7 @@ class MemeManager(object):
     def __init__(self):
         self.memes_file_path = 'memes.json'
 
-    def load_memes(self) -> dict[str, list[str]]:
+    def load_memes(self) -> dict[str, dict[str, list[str]]]:
         # check if memes.json exists
         if not os.path.exists(self.memes_file_path):
             with open(self.memes_file_path, 'w') as f:
@@ -32,7 +32,7 @@ class MemeManager(object):
         for meme in memes:
             if meme not in meme_content_dir:
                 meme_img = ocr.get_image(meme)
-                meme_content_dir[meme] = ocr.get_text(meme_img)
+                meme_content_dir[meme] = {'content': ocr.get_text(meme_img)}
 
         with open(self.memes_file_path, 'w') as f:
             json.dump(meme_content_dir, f, indent=4)
