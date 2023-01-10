@@ -134,7 +134,7 @@ def load_memes(path: str) -> list[str]:
     for root, dirs, files in os.walk(path):
         for file in files:
             if file.endswith('.png') or file.endswith('.jpg'):
-                memes.append(os.path.join(root, file))
+                memes.append(f'{root}/{file}')
     return memes
 
 
