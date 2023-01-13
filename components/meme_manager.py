@@ -36,3 +36,32 @@ class MemeManager(object):
 
         with open(self.memes_file_path, 'w') as f:
             json.dump(meme_content_dir, f, indent=4)
+
+    def find_memes(self, content: str, description: str) -> list[str]:
+        memes = self.load_memes()
+        results = []
+        # if content in not empty, search for memes with that content
+        if content.strip() != '':
+            for meme, data in memes.items():
+                if _check_match_in_content(content, data):
+                    results.append(meme)
+        # if description is not empty, search for memes with that description
+        if description.strip() != '':
+            for meme, data in memes.items():
+                if _check_match_in_description(description, data):
+                    results.append(meme)
+        return results
+
+
+def _check_match_in_content(content: str, data: dir) -> bool:
+    for text in data['content']:
+        if content.lower() in text.lower():
+            return True
+    return False
+
+
+def _check_match_in_description(description: str, data: dir) -> bool:
+    for text in data['description']:
+        if description.lower() in text.lower():
+            return True
+    return False

@@ -15,7 +15,7 @@ def main() -> None:
             case sg.WIN_CLOSED | 'exit':
                 break
             case 'find':
-                print('find')
+                on_find_click()
             case 'add_folder':
                 on_add_folder_click()
             case 'add_meme':
@@ -142,6 +142,45 @@ def save_config(config: dict) -> None:
     with open('config.toml', 'wb') as f:
         data = toml_w.dumps(config)
         f.write(data.encode('utf-8'))
+
+
+def on_find_click() -> None:
+    find_meme_layout = [
+        [sg.Column(
+            [
+                [sg.Text('')],  # spacer
+                [sg.Text('Meme content:')],
+                [sg.InputText(key='content', size=(30, 1))],
+                [sg.Text('')],  # spacer
+                [sg.Text('Meme description:')],
+                [sg.InputText(key='description', size=(30, 1))],
+                [sg.Text('')],  # spacer
+                [sg.Button('Find', key='find', size=(10, 1))],
+                [sg.Text('')],  # spacer
+                [sg.Text('Memes you may be looking for:')],  # spacer
+                [sg.Text('', key='result', size=(30, 1))]
+            ],
+            justification='center')],
+    ]
+    find_meme_window = sg.Window('Find Meme', find_meme_layout, size=(400, 600))
+    find_meme_window.finalize()
+
+    manager = meme_manager.MemeManager()
+
+    while True:
+        find_meme_event, find_meme_values = find_meme_window.read()
+        match find_meme_event:
+            case 'find':
+                content = find_meme_values['content']
+                description = find_meme_values['description']
+
+                memes = manager.find_memes(content, description)
+                meme_names = [meme.split('/')[-1] for meme in memes]
+
+                find_meme_window['result'].update('\n'.join(meme_names))
+            case sg.WIN_CLOSED:
+                find_meme_window.close()
+                break
 
 
 if __name__ == '__main__':

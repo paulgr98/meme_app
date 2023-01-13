@@ -26,3 +26,8 @@ def get_text(image: Image) -> list[str]:
     # lowercase all strings
     text = [x.lower() for x in text]
     return text
+
+
+# TODO: implement OpenCV YOLO object detection
+def get_objects_from_image(self, path: str) -> list[str]:
+    pass
